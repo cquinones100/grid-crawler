@@ -1,9 +1,10 @@
 import React from 'react'
 import {
-  movePlayer,
+  move,
   determineRowBounds
 } from '../../utils/controls/playerControls.js'
 import { UP, DOWN, LEFT, RIGHT } from '../../constants/movementDirections'
+import { LEVELS } from '../../constants/levels'
 
 describe('move player', () => {
   const currentPosition = 1
@@ -13,23 +14,23 @@ describe('move player', () => {
     let direction = RIGHT
     let newPosition = 2
 
-    expect(movePlayer(currentPosition, direction, difficulty)).toEqual(newPosition)
+    expect(move(currentPosition, direction, 1)).toEqual(newPosition)
 
     direction = LEFT
     newPosition = 0
 
-    expect(movePlayer(currentPosition, direction, difficulty)).toEqual(newPosition)
+    expect(move(currentPosition, direction, 1)).toEqual(newPosition)
 
     direction = DOWN
     newPosition = 6
 
-    expect(movePlayer(currentPosition, direction, difficulty)).toEqual(newPosition)
+    expect(move(currentPosition, direction, 1)).toEqual(newPosition)
 
     direction = UP
     const newCurrentPosition = 6
     newPosition = 1
 
-    expect(movePlayer(newCurrentPosition, direction, difficulty)).toEqual(newPosition)
+    expect(move(newCurrentPosition, direction, 1)).toEqual(newPosition)
   })
 
   it('does not let a user go beyond the bounds of the board', () => {
@@ -37,15 +38,15 @@ describe('move player', () => {
 
     let direction = RIGHT
 
-    expect(movePlayer(currentPosition, direction, difficulty)).toEqual(24)
+    expect(move(currentPosition, direction, 1)).toEqual(24)
     direction = DOWN
 
-    expect(movePlayer(currentPosition, direction, difficulty)).toEqual(24)
+    expect(move(currentPosition, direction, 1)).toEqual(24)
 
     currentPosition = 4
     direction = RIGHT
 
-    expect(movePlayer(currentPosition, direction, difficulty)).toEqual(4)
+    expect(move(currentPosition, direction, 1)).toEqual(4)
   })
 })
 
@@ -56,4 +57,11 @@ it('determines the row bounds', () => {
 
   position = 23
   expect(determineRowBounds(difficulty, position)).toEqual([20, 24])
+})
+
+describe('move block', () => {
+  let currentPosition = 3
+  let direction = RIGHT
+
+  expect(move(currentPosition, direction, 1)).toEqual(4)
 })

@@ -9,3 +9,6 @@ export const LEVELS = [{
     { position: 25 }
   ]
 }]
+
+export const findLevelById = id =>
+  LEVELS.find(level => parseInt(level.id, 10) === parseInt(id, 10))

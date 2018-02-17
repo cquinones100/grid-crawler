@@ -3,6 +3,8 @@ import Cell from './Cell'
 import PropTypes from 'prop-types'
 import { LEVELS } from '../constants/levels'
 import { movePlayer } from '../utils/controls/playerControls'
+import { UP, DOWN, LEFT, RIGHT } from '../constants/movementDirections'
+import { boxPositions } from '../utils/controls/playerControls'
 
 class Board extends Component {
   constructor(props) {
@@ -33,13 +35,36 @@ class Board extends Component {
   }
 
   handleKeyDown(e) {
+    const directions = [UP, DOWN, LEFT, RIGHT]
     const { position, level } = this.state
     const { difficulty } = level
     const direction = e.keyCode
 
-    this.setState({
-      position: movePlayer(position, direction, difficulty)
-    })
+    if (directions.includes(direction)) {
+      this.setState({
+        position: movePlayer(position, direction, difficulty, level.id)
+      }, () => {
+        const { position, level } = this.state
+        const { obstacles } = level
+
+        if (boxPositions(level).includes(position)) {
+          const newObstacles = obstacles.map(box => {
+            if (parseInt(box.position, 10) === parseInt(position, 10)) {
+              return { ...box, position: box.position + 1 }
+            }
+            return {...box}
+          })
+
+          this.setState({
+            ...this.state,
+            level: {
+              ...this.state.level,
+              obstacles: newObstacles
+            }
+          })
+        }
+      })
+    }
   }
 
   render() {
